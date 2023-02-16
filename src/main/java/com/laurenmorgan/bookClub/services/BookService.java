@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.laurenmorgan.bookClub.models.Book;
 import com.laurenmorgan.bookClub.repositories.BookRepository;
+import com.laurenmorgan.bookClub.repositories.UserRepository;
 
 @Service
 public class BookService {
@@ -15,6 +16,8 @@ public class BookService {
 	
 	@Autowired 
 	BookRepository bookRepo;
+	
+
 	
 	
 	

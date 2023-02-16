@@ -35,18 +35,14 @@ public class CRUDController {
 	
 	
 	  @GetMapping("/home")
-	     public String nextPage(Model model, HttpSession session, @ModelAttribute("user") User user) {
+	     public String nextPage(Model model, HttpSession session, @ModelAttribute("user") User user,@ModelAttribute("book") Book book) {
 	    	 
 	    
-	    	session.getAttribute("userId");
-	    	
+	    	session.getAttribute("userId");	    	
 	    	Long sessionId = (Long) session.getAttribute("userId");
-	    	
-	    
-	    	 User userId = userServ.findOne(sessionId);
-	    	 
-	    	 
-	    	 model.addAttribute("user", userId);
+	    	User userId = userServ.findOne(sessionId);
+	    	model.addAttribute("user", userId);
+	    	model.addAttribute("books", bookServ.allBooks());
 
 	    	 //this grabs the userID 
 	    	
@@ -66,28 +62,44 @@ public class CRUDController {
 	
 	
 	@GetMapping("/book/new")
-	public String newBook(@ModelAttribute("book") Book book, Model model, @ModelAttribute("user") User user, BindingResult result, HttpSession session) {
+	public String newBook(@ModelAttribute("book") Book book, 
+						Model model,
+						@ModelAttribute("user") User user, 
+						BindingResult result, 
+						HttpSession session) {
 		
-		session.getAttribute("userId");
-    	
-    	Long sessionId = (Long) session.getAttribute("userId");
-    	
-    
-    	 User userId = userServ.findOne(sessionId);
-    	 
-    	 
-    	 model.addAttribute("user", userId);
+//		session.getAttribute("userId");
+//    	Long sessionId = (Long) session.getAttribute("userId");
+//    	User userId = userServ.findOne(sessionId);
+
+		
+		//this is easier and shorter algorithm
+		User users = userServ.findOne((Long) session.getAttribute("userId"));
+    	 model.addAttribute("user", users);
+
 		
 		return "newBook.jsp";
 	}
 	
 	@PostMapping("/addBook/{userId}")
-	public String createBook(@Valid @ModelAttribute("book") Book book, Model model, HttpSession session, BindingResult result, @PathVariable("userId") String userId, User user) {
+	public String createBook(@Valid @ModelAttribute("book") Book book, 
+							BindingResult result, 
+							Model model, HttpSession session,
+							@PathVariable("userId") String userId, 
+							User user) {
 		
-		
-		
-//		System.out.println(session.getAttribute("userId"));
-
+		session.getAttribute("userId");
+		Long sessionId = (Long) session.getAttribute("userId");
+    	
+	    
+   	 	User userSessionId = userServ.findOne(sessionId);
+   	 	
+//   	 	System.out.println(userSessionId.getId());
+   	 	
+   	 User users = userServ.findOne((Long) session.getAttribute("userId"));
+ 	 model.addAttribute("user", users);
+   	 	
+   	 	
         if(result.hasErrors()) {
         	
         	model.addAttribute("book",book);
@@ -95,10 +107,34 @@ public class CRUDController {
         }
         
         else { 
+        book.setUser(userSessionId);
+        System.out.println(book.getUser());
 		bookServ.createOrUpdate(book);
 		
 		
 		return "redirect:/home";
         }
+	}
+	
+	@GetMapping("/books/{book_id}")
+	public String bookDetails(@ModelAttribute("book") Book book, 
+							 Model model, 
+							 @ModelAttribute("user") User user, 
+							 BindingResult result, 
+							 HttpSession session, @PathVariable("book_id") Long bookId) {
+		
+//		session.getAttribute("userId");
+//    	Long sessionId = (Long) session.getAttribute("userId");
+//    	User userId = userServ.findOne(sessionId);
+//    	model.addAttribute("user", userId);
+		
+//		User users = userServ.findOne((Long) session.getAttribute("userId"));
+//   	 	model.addAttribute("user", users);
+//    	DONT NEED THIS ^
+    	
+    	model.addAttribute("book", bookServ.findOne(bookId));
+
+		
+		return "bookDetails.jsp";
 	}
 }

@@ -18,14 +18,19 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 </head>
-<body>
+<body class='bg-light'>
 <div>
-<h1> Welcome <c:out value="${user.name}"> </c:out> </h1>
-	<p> Books from everyone's shelves </p>
-	<a href="/"> Logout </a>
-	<a href="book/new"> Add to my shelf!</a>
-</div>
-	<table class="table table-striped">
+ <div class="container">
+
+	<h1> Welcome, <c:out value="${user.name}"> </c:out> </h1>
+	<div class="d-flex justify-content-between bd-highlight mb-2">
+		<h2> Books from everyone's shelves </h2>
+		<div class="d-flex flex-column mb-3 ">
+			<a href="/"> Logout </a>
+			<a href="book/new"> Add to my shelf!</a>
+		</div>
+	</div>
+	<table class="table table-striped table-bordered">
 	  <thead>
 	    <tr>
 	      <th scope="col">ID</th>
@@ -35,15 +40,17 @@
 	    </tr>
 	  </thead>
 	  <tbody>
+	     <c:forEach var="booksUsers" items="${books}"> 
 	    <tr>
-	      <th scope="row">1</th>
-	      <td>Mark</td>
-	      <td>Otto</td>
-	      <td>@mdo</td>
+	      <th scope="row"><c:out value = "${booksUsers.user.id}"/></th>
+	      <td><a href="/books/${booksUsers.id}"><c:out value = "${booksUsers.title}"/></a></td>
+	      <td><c:out value = "${booksUsers.author}"/></td>
+	      <td><c:out value = "${booksUsers.user.name}"/></td>
 	    </tr>
-	
+	     </c:forEach>
 	  </tbody>
 	</table>
-
+</div>
+</div>
 </body>
 </html>

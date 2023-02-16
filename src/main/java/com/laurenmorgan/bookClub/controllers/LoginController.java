@@ -91,7 +91,6 @@ public class LoginController {
         	}
          else {
         	 session.setAttribute("userId", user.getId());
-        	 System.out.println(user.getId());
         	 }
     
         	 

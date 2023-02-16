@@ -42,7 +42,6 @@ public class UserService {
 	    	}
 	    
 	    	String hashed = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
-	    	System.out.println(hashed);
 	    	
 	        // Return null if result has errors
 	    	newUser.setPassword(hashed);

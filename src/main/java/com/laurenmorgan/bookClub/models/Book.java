@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -29,25 +30,27 @@ public class Book {
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private Long id;
 	    
-		@NotEmpty(message="title is required!")
-		 @Size(min=3, max=30, message="title must be between 3 and 30 characters")
-		 private String title;
+		
+		//Should always do not blank for forms ? Instead of NotEmpty 
+		@NotBlank(message="title is required!")
+		@Size(min=3, max=30, message="title must be between 3 and 30 characters")
+		private String title;
 		
 		
-		@NotEmpty(message="Author is required!")
+		@NotBlank(message="Author is required!")
 	    @Size(min=3, max=30, message="Author must be between 3 and 30 characters")
 	    private String author;
 	    
-		@NotEmpty(message="Thoughts on this book are required!")
+		@NotBlank(message="Thoughts on this book are required!")
 	    @Size(min=8, max=225, message="Thoughts must be between 8 and 225 characters")
 	    private String thoughts;
 	    
 	    
-	   @ManyToOne(fetch = FetchType.LAZY)
-	   @JoinColumn(name = "user_id")
-	   private User user;
+	    @ManyToOne(fetch = FetchType.LAZY)
+	    @JoinColumn(name = "user_id")
+	    private User user;
 	   
-	   @Column(updatable=false)
+	    @Column(updatable=false)
 	    @DateTimeFormat(pattern="yyyy-MM-dd")
 	    private Date createdAt;
 	    @DateTimeFormat(pattern="yyyy-MM-dd")
